@@ -1,0 +1,31 @@
+.main-section{
+    width: 114rem;
+    background-color: $main-background-color;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%,-20%);
+    padding: 6rem;
+
+    .section-1{
+        margin-bottom: 7rem;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 3rem;
+    }
+
+    .section-2{
+        margin-bottom: 8rem;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20rem;
+        text-align: center;
+    }
+
+    .section-3{
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        grid-template-rows: repeat(3, auto);
+        justify-content: space-around;
+    }
+}
