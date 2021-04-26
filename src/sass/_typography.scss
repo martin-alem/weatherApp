@@ -6,13 +6,15 @@ h3{
 h1{
     font-size: 30rem;
     color: $color-text;
+    height: 36rem;
+    font-weight: 700;
     position: relative;
 
     .units{
         position: absolute;
         font-size: 5rem;
-        top: 1.4rem;
-        right: 2rem;
+        top: 5.5rem;
+        right: -2rem;
     }
 }
 
@@ -21,11 +23,22 @@ h2{
     color: $color-text;
 }
 
-p.image{
-    margin-bottom: 2rem;
+.image{
+    height: 35rem;
 }
 
-p.extra-data{
-    font-size: 2.5rem;
-    color: $color-text;
+p{
+
+    &.extra-data{
+        font-size: 2.5rem;
+        color: $color-text;
+
+        .fa-diamond{
+
+            margin-right: 1.5rem;
+        }
+        .extra-value{
+            color: $primary-color;
+        }
+    }
 }

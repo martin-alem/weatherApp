@@ -8,7 +8,7 @@
     padding: 6rem;
 
     .section-1{
-        margin-bottom: 7rem;
+        margin-bottom: 4rem;
         display: grid;
         grid-template-columns: repeat(2, auto) 2fr repeat(2, auto);
         align-items: center;
@@ -20,6 +20,7 @@
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 20rem;
+        align-items: center;
         text-align: center;
     }
 
@@ -28,5 +29,6 @@
         grid-template-columns: repeat(3, auto);
         grid-template-rows: repeat(3, auto);
         justify-content: space-around;
+        row-gap: 1rem;
     }
 }
