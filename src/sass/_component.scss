@@ -1,4 +1,6 @@
 .search{
+    display: inline;
+    
     &_input{
         width: 90%;
         padding: 1rem;
@@ -97,4 +99,8 @@
 
 .fa{
     color: $icon-color;
+
+    &-diamond{
+        color: $color-text;
+    }
 }
