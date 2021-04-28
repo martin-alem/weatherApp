@@ -1,3 +1,5 @@
+import { util } from "../../util";
+
 export class WeatherManager {
 
     #weatherData;
@@ -37,6 +39,15 @@ export class WeatherManager {
                     });
             });
         }
+    }
+
+
+    fetchDataOnFormSubmit(cityName){
+
+        return new Promise((resolve, reject) => {
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=aac304093f797550435d2ed3dad3f25b&units=metric`;
+            this.#makeRequest(url, resolve, reject);
+        });
     }
 
     /**
@@ -124,10 +135,10 @@ export class WeatherManager {
     #extractWeatherData() {
         const weatherData = {
             id: this.#rawData.weather[0].id,
-            temperature: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.temp), 1),
-            minTemperature: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.temp_min), 100),
-            maxTemperature: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.temp_max), 100),
-            feelsLike: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.feels_like), 100),
+            temperature: util.toNDecimalPlaces(util.toFarienhiet(this.#rawData.main.temp), 1),
+            minTemperature: util.toNDecimalPlaces(util.toFarienhiet(this.#rawData.main.temp_min), 100),
+            maxTemperature: util.toNDecimalPlaces(util.toFarienhiet(this.#rawData.main.temp_max), 100),
+            feelsLike: util.toNDecimalPlaces(util.toFarienhiet(this.#rawData.main.feels_like), 100),
             pressure: this.#rawData.main.pressure,
             humidity: this.#rawData.main.humidity,
             description: this.#rawData.weather[0].description,
@@ -140,15 +151,5 @@ export class WeatherManager {
         }
 
         this.#weatherData = weatherData;
-    }
-
-    #toFarienhiet(celsius) {
-        return (celsius * (9 / 5)) + 32;
-    }
-
-    #toNDecimalPlaces(number, decimalPlaces) {
-
-        const tmpNum = Number.parseInt(number * decimalPlaces);
-        return tmpNum / decimalPlaces;
     }
 }

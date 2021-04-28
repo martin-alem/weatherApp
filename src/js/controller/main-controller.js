@@ -7,6 +7,9 @@ const view = new View();
 
 const eventHandles = {
 
+    /**
+     * 
+     */
     handlePageLoad: () => {
         view.renderOrClearPreview();
         weatherManager.fetchDataOnPageLoad()
@@ -15,6 +18,19 @@ const eventHandles = {
                 view.render(data);
             })
             .catch(error => console.log(error))
+    },
+
+    handleFormSubmit: () => {
+        const cityName = view.getFormInput();
+        if (cityName) {
+            view.renderOrClearPreview();
+            weatherManager.fetchDataOnFormSubmit(cityName)
+                .then(data => {
+                    view.renderOrClearPreview();
+                    view.render(data);
+                })
+                .catch(error => view.renderError(error.message));
+        }
     }
 }
 

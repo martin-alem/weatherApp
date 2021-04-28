@@ -1,3 +1,4 @@
+import { util } from "../../util";
 
 export class View {
 
@@ -23,6 +24,11 @@ export class View {
 
     #overlay = document.querySelector(".overlay");
     #modal = document.querySelector(".modal");
+
+    #submitForm = document.querySelector(".search_input");
+    #submitButton = document.querySelector(".btn-submit");
+
+    #error = document.querySelector(".error");
 
 
     /**
@@ -65,7 +71,37 @@ export class View {
 
         this.#bookMarkButton.addEventListener("click", this.#openModal);
         this.#closeButton.addEventListener("click", this.#closeModal);
+        this.#submitButton.addEventListener("click", eventHandles.handleFormSubmit)
         window.addEventListener("load", eventHandles.handlePageLoad);
+    }
+
+    /**
+     * 
+     * @returns 
+     */
+    getFormInput() {
+        try {
+            return util.validateCityName(this.#submitForm.value);
+        } catch (error) {
+            // display error message
+            console.log(error);
+            return null;
+        }
+    }
+
+    /**
+     * 
+     * @param {*} errorMessage 
+     */
+    renderError(errorMessage) {
+
+        this.#error.textContent = errorMessage;
+        this.#error.classList.toggle("clear");
+        this.renderOrClearPreview();
+
+        setTimeout(() => {
+            this.#error.classList.toggle("clear");
+        }, 3000);
     }
 
     /**
