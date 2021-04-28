@@ -32,7 +32,7 @@ export class WeatherManager {
                         const lon = currentLocation[1];
                         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=aac304093f797550435d2ed3dad3f25b&units=metric`;
                         this.#makeRequest(url, resolve, reject);
-                        this.setDefaultLocation(`${currentLocation[0]},${currentLocation[1]}`);
+                        this.setDefaultLocation("No");
                     })
                     .catch(error => {
                         reject(error)
@@ -119,11 +119,15 @@ export class WeatherManager {
      * If no, location is persisted in localStorage.
      * @param {String} location
      */
-    setDefaultLocation(location) {
+    setDefaultLocation(cmd) {
 
-        if (!localStorage.getItem("defaultLocation")) {
-            localStorage.setItem("defaultLocation", location);
+        const location = `${this.#weatherData.coords.lat},${this.#weatherData.coords.lon}`;
+        if (localStorage.getItem("defaultLocation")) {
+            if (cmd === "Yes") {
+                localStorage.removeItem("defaultLocation");
+            }
         }
+        localStorage.setItem("defaultLocation", location);
     }
 
     /**

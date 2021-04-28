@@ -65,8 +65,9 @@ const eventHandles = {
         }
     },
 
-    handleButtonSave: () =>{
-
+    handleButtonSave: () => {
+        weatherManager.setDefaultLocation("Yes");
+        view.renderNotification(`Location Set As Default!!!`);
     },
 
     handleCard: (cityName) => {
