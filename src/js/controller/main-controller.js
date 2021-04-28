@@ -17,7 +17,7 @@ const eventHandles = {
                 view.renderOrClearPreview();
                 view.render(data);
             })
-            .catch(error => console.log(error))
+            .catch(error => view.renderError(error.message));
     },
 
     handleFormSubmit: () => {
@@ -31,6 +31,16 @@ const eventHandles = {
                 })
                 .catch(error => view.renderError(error.message));
         }
+    },
+
+    handleLocationButton: () => {
+        view.renderOrClearPreview();
+        weatherManager.fetchDataOnLocationButton()
+            .then(data => {
+                view.renderOrClearPreview();
+                view.render(data);
+            })
+            .catch(error => view.renderError(error.message));
     }
 }
 

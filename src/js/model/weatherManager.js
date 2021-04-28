@@ -42,11 +42,37 @@ export class WeatherManager {
     }
 
 
-    fetchDataOnFormSubmit(cityName){
+    /**
+     * 
+     * @param {*} cityName 
+     * @returns 
+     */
+    fetchDataOnFormSubmit(cityName) {
 
         return new Promise((resolve, reject) => {
             const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=aac304093f797550435d2ed3dad3f25b&units=metric`;
             this.#makeRequest(url, resolve, reject);
+        });
+    }
+
+    /**
+     * 
+     * @returns 
+     */
+    fetchDataOnLocationButton() {
+
+        return new Promise((resolve, reject) => {
+            this.#getCurrentLocation()
+                .then(currentLocation => {
+                    const lat = currentLocation[0];
+                    const lon = currentLocation[1];
+                    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=aac304093f797550435d2ed3dad3f25b&units=metric`;
+                    this.#makeRequest(url, resolve, reject);
+                    this.setDefaultLocation(`${currentLocation[0]},${currentLocation[1]}`);
+                })
+                .catch(error => {
+                    reject(error)
+                });
         });
     }
 

@@ -27,6 +27,7 @@ export class View {
 
     #submitForm = document.querySelector(".search_input");
     #submitButton = document.querySelector(".btn-submit");
+    #locationButton = document.querySelector(".btn-location");
 
     #error = document.querySelector(".error");
 
@@ -71,7 +72,8 @@ export class View {
 
         this.#bookMarkButton.addEventListener("click", this.#openModal);
         this.#closeButton.addEventListener("click", this.#closeModal);
-        this.#submitButton.addEventListener("click", eventHandles.handleFormSubmit)
+        this.#submitButton.addEventListener("click", eventHandles.handleFormSubmit);
+        this.#locationButton.addEventListener("click", eventHandles.handleLocationButton);
         window.addEventListener("load", eventHandles.handlePageLoad);
     }
 
