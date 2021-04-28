@@ -36,9 +36,8 @@ export class View {
      *  Access dom elemets and adds/removes animate class
      */
     renderOrClearPreview() {
-        this.#tempValue.classList.toggle("animate");
-        this.#image.classList.toggle("animate");
-        this.#extraValue.forEach(node => {
+        const weatherData = Array.from(this.#extraValue).concat(this.#tempValue, this.#image);
+        weatherData.forEach(node => {
             node.classList.toggle("animate");
         });
     }
@@ -85,8 +84,7 @@ export class View {
         try {
             return util.validateCityName(this.#submitForm.value);
         } catch (error) {
-            // display error message
-            console.log(error);
+            this.renderError(error.message);
             return null;
         }
     }
@@ -99,7 +97,6 @@ export class View {
 
         this.#error.textContent = errorMessage;
         this.#error.classList.toggle("clear");
-        this.renderOrClearPreview();
 
         setTimeout(() => {
             this.#error.classList.toggle("clear");

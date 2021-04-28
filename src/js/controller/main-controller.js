@@ -14,33 +14,45 @@ const eventHandles = {
         view.renderOrClearPreview();
         weatherManager.fetchDataOnPageLoad()
             .then(data => {
-                view.renderOrClearPreview();
                 view.render(data);
             })
-            .catch(error => view.renderError(error.message));
+            .catch(error => {
+                view.renderError(error.message)
+            })
+            .finally(() => view.renderOrClearPreview());
     },
 
+    /**
+     * 
+     */
     handleFormSubmit: () => {
         const cityName = view.getFormInput();
         if (cityName) {
             view.renderOrClearPreview();
             weatherManager.fetchDataOnFormSubmit(cityName)
                 .then(data => {
-                    view.renderOrClearPreview();
                     view.render(data);
                 })
-                .catch(error => view.renderError(error.message));
+                .catch(error => {
+                    view.renderError(error.message)
+                })
+                .finally(() => view.renderOrClearPreview());
         }
     },
 
+    /**
+     * 
+     */
     handleLocationButton: () => {
         view.renderOrClearPreview();
         weatherManager.fetchDataOnLocationButton()
             .then(data => {
-                view.renderOrClearPreview();
                 view.render(data);
             })
-            .catch(error => view.renderError(error.message));
+            .catch(error => {
+                view.renderError(error.message)
+            })
+            .finally(() => view.renderOrClearPreview());
     }
 }
 
