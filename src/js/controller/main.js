@@ -1,4 +1,4 @@
-import {eventListeners, overlay, modal} from "./../view/events";
+import {eventListeners, overlay, modal, renderPreview, clearPreview} from "./../view/events";
 import {WeatherManager} from "./../model/weatherManager"
 
 
@@ -17,7 +17,13 @@ const eventHandles = {
     },
 
     handlePageLoad: () => {
+        renderPreview();
        weatherManager.fetchDataOnPageLoad()
+       .then(data => {
+           clearPreview();
+           console.log(data);
+       })
+       .catch(error => console.log(error))
     }
 }
 

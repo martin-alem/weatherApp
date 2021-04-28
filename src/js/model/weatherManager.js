@@ -1,48 +1,70 @@
-export class WeatherManager{
+export class WeatherManager {
 
     #weatherData;
     #currentWeatherLocation;
     #rawData;
 
-    fetchDataOnPageLoad(){
+    /**
+     * Checks if there is a default location in localStorage.
+     * If yes, makes a request.
+     * If no, gets users current location, makes request and set it as default location.
+     * @returns A promise with the resolved value as the weather data
+     */
+    fetchDataOnPageLoad() {
 
         const location = this.#getDefaultLocation();
 
-        if(location){
-            this.#getWeatherData({type: "pageLoad", data: location});
-        }
-        else{
-            this.#getCurrentLocation()
-            .then(currentLocation => {
-                this.#getWeatherData({type: "pageLoad", data: currentLocation});
-                this.setDefaultLocation(`${currentLocation[0]},${currentLocation[1]}`);
-            })
-            .catch(error => {
-                console.log(error)
-            })
+        if (location) {
+
+            return new Promise((resolve, reject) => {
+                const lat = location[0];
+                const lon = location[1];
+                const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=aac304093f797550435d2ed3dad3f25b&units=metric`;
+                this.#makeRequest(url, resolve, reject);
+            });
+        } else {
+            return new Promise((resolve, reject) => {
+                this.#getCurrentLocation()
+                    .then(currentLocation => {
+                        const lat = location[0];
+                        const lon = location[1];
+                        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=aac304093f797550435d2ed3dad3f25b&units=metric`;
+                        this.#makeRequest(url, resolve, reject);
+                        this.setDefaultLocation(`${currentLocation[0]},${currentLocation[1]}`);
+                    })
+                    .catch(error => {
+                        reject(error)
+                    });
+            });
         }
     }
 
-    #getDefaultLocation(){
+    /**
+     * Fetches the default location in localStorage if it exist.
+     * @returns An array containing coordinates of a location or null
+     */
+    #getDefaultLocation() {
 
-        if(window.localStorage.getItem("defaultLocation")){
+        if (window.localStorage.getItem("defaultLocation")) {
             const defaultLocation = window.localStorage.getItem("defaultLocation").split(",");
             return defaultLocation;
 
-        }else{
+        } else {
             return null;
         }
     }
 
-    // gets the user current location
-    #getCurrentLocation(){
+    /**
+     * Request for the user's current location.
+     * @returns A promise with the resolved value as the user's current location
+     */
+    #getCurrentLocation() {
 
         return new Promise((resolve, reject) => {
 
-            if(!navigator.geolocation){
+            if (!navigator.geolocation) {
                 reject(new Error("Geolocation is not supported"));
-            }
-            else{
+            } else {
                 navigator.geolocation.getCurrentPosition(position => {
                     const location = [];
                     location.push(position.coords.latitude, position.coords.longitude);
@@ -54,54 +76,57 @@ export class WeatherManager{
         });
     }
 
-    //Recieves a location as string an saves in local storage
-    setDefaultLocation(location){
+    /**
+     * Accepts a location as string.
+     * Checks if it already exist.
+     * If yes, location is not persisted.
+     * If no, location is persisted in localStorage.
+     * @param {String} location
+     */
+    setDefaultLocation(location) {
 
-        if(!localStorage.getItem("defaultLocation")){
+        if (!localStorage.getItem("defaultLocation")) {
             localStorage.setItem("defaultLocation", location);
         }
     }
 
-    #getWeatherData(request){
-
-        if(request.type === "pageLoad"){
-            const lat = request.data[0];
-            const lon = request.data[1];
-            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=aac304093f797550435d2ed3dad3f25b&units=metric`;
-            
-            this.#makeRequest(url);
-        }
-
-        else if(request.type === "submitForm"){
-            const city = request.data;
-            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=aac304093f797550435d2ed3dad3f25b&units=metric`;
-            
-            this.#makeRequest(url);
-        }
-    }
-
-    #makeRequest(url){
+    /**
+     * Makes an http request with the provides url.
+     * The request is parsed into json.
+     * Relevant data is extracted from json.
+     * The resolved value is the weather data.
+     * @param {String} url 
+     * @param {Function} resolve 
+     * @param {Function} reject 
+     */
+    #makeRequest(url, resolve, reject) {
 
         fetch(url)
-        .then(response => {
-            if(response.ok){
-                response.json()
-                .then(data => {
-                    this.#rawData = data
-                    this.#extractWeatherData();
-                })
-                .catch(error => console.log("Could not convert to json: "+ error));
-            }
-        })
-        .catch(error => console.log("Request Failed: "+error));
+            .then(response => {
+                if (response.ok) {
+                    response.json()
+                        .then(data => {
+                            this.#rawData = data
+                            this.#extractWeatherData();
+                            resolve(this.#weatherData);
+                        })
+                        .catch(error => reject(error));
+                } else {
+                    reject(new Error("Invalid Request"))
+                }
+            })
+            .catch(error => reject(error));
     }
 
-    #extractWeatherData(){
+    /**
+     * Extracts relevant data from response and format the data.
+     */
+    #extractWeatherData() {
         const weatherData = {
             temparature: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.temp), 10),
             minTemperature: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.temp_min), 100),
-            maxTemperature: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.temp_max),100),
-            feelsLike: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.feels_like),100),
+            maxTemperature: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.temp_max), 100),
+            feelsLike: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.feels_like), 100),
             pressure: this.#rawData.main.pressure,
             humidity: this.#rawData.main.humidity,
             description: this.#rawData.weather[0].description,
@@ -114,14 +139,13 @@ export class WeatherManager{
         }
 
         this.#weatherData = weatherData;
-        console.log(this.#weatherData);
     }
 
-    #toFarienhiet(celsius){
-        return (celsius * (9/5)) + 32;
+    #toFarienhiet(celsius) {
+        return (celsius * (9 / 5)) + 32;
     }
 
-    #toNDecimalPlaces(number, decimalPlaces){
+    #toNDecimalPlaces(number, decimalPlaces) {
 
         const tmpNum = Number.parseInt(number * decimalPlaces);
         return tmpNum / decimalPlaces;
