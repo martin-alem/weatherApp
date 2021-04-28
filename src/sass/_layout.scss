@@ -1,34 +1,43 @@
-.main-section{
-    width: 114rem;
-    background-color: $main-background-color;
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%,-20%);
-    padding: 6rem;
+.main-section {
+  width: 114rem;
+  background-color: $main-background-color;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -20%);
+  padding: 6rem;
 
-    .section-1{
-        margin-bottom: 4rem;
-        display: grid;
-        grid-template-columns: repeat(2, auto) 2fr repeat(2, auto);
-        align-items: center;
-        gap: 3rem;
+  .section-1 {
+    margin-bottom: 4rem;
+    display: grid;
+    grid-template-columns: repeat(2, auto) 2fr repeat(2, auto);
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .section-2 {
+    margin-bottom: 8rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20rem;
+    align-items: center;
+    text-align: center;
+
+    .image {
+      position: relative;
     }
 
-    .section-2{
-        margin-bottom: 8rem;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20rem;
-        align-items: center;
-        text-align: center;
+    .description {
+      position: relative;
+      top: -5rem;
     }
+  }
 
-    .section-3{
-        display: grid;
-        grid-template-columns: repeat(3, auto);
-        grid-template-rows: repeat(3, auto);
-        justify-content: space-around;
-        row-gap: 1rem;
-    }
+  .section-3 {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    grid-template-rows: repeat(3, auto);
+    justify-content: space-around;
+    row-gap: 1rem;
+  }
 }

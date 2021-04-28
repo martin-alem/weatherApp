@@ -28,8 +28,9 @@ export class View {
     #submitForm = document.querySelector(".search_input");
     #submitButton = document.querySelector(".btn-submit");
     #locationButton = document.querySelector(".btn-location");
+    #likeButton = document.querySelector(".btn-like");
 
-    #error = document.querySelector(".error");
+    #notification = document.querySelector(".notification");
 
 
     /**
@@ -73,6 +74,7 @@ export class View {
         this.#closeButton.addEventListener("click", this.#closeModal);
         this.#submitButton.addEventListener("click", eventHandles.handleFormSubmit);
         this.#locationButton.addEventListener("click", eventHandles.handleLocationButton);
+        this.#likeButton.addEventListener("click", eventHandles.handleLikeButton);
         window.addEventListener("load", eventHandles.handlePageLoad);
     }
 
@@ -93,13 +95,13 @@ export class View {
      * 
      * @param {*} errorMessage 
      */
-    renderError(errorMessage) {
+    renderNotification(errorMessage) {
 
-        this.#error.textContent = errorMessage;
-        this.#error.classList.toggle("clear");
+        this.#notification.textContent = errorMessage;
+        this.#notification.classList.toggle("clear");
 
         setTimeout(() => {
-            this.#error.classList.toggle("clear");
+            this.#notification.classList.toggle("clear");
         }, 3000);
     }
 

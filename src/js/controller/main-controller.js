@@ -53,6 +53,16 @@ const eventHandles = {
                 view.renderError(error.message)
             })
             .finally(() => view.renderOrClearPreview());
+    },
+
+    handleLikeButton: () => {
+        const location = weatherManager.persistLocation();
+        if (location) {
+            view.renderNotification(`Location ${location} Saved Successfully!!!`);
+        }
+        else {
+            view.renderNotification(`Location ${location} Already Exist!!!`);
+        }
     }
 }
 

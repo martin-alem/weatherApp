@@ -128,6 +128,31 @@ export class WeatherManager {
     }
 
     /**
+     * 
+     * @returns 
+     */
+    persistLocation() {
+
+        if (localStorage.getItem("locations")) {
+            const savedLocations = localStorage.getItem("locations").split(",");
+
+            for (let i = 0; i < savedLocations.length; i += 2) {
+                if (savedLocations[i] === this.#currentWeatherLocation) {
+                    return null;
+                }
+            }
+            savedLocations.push(`${this.#currentWeatherLocation},${Date()}`);
+            localStorage.setItem("locations", savedLocations);
+        }
+        else {
+            const location = `${this.#currentWeatherLocation},${Date()}`;
+            localStorage.setItem("locations", location);
+        }
+
+        return this.#currentWeatherLocation;
+    }
+
+    /**
      * Makes an http request with the provides url.
      * The request is parsed into json.
      * Relevant data is extracted from json.
@@ -160,7 +185,7 @@ export class WeatherManager {
      */
     #extractWeatherData() {
         const weatherData = {
-            id: this.#rawData.weather[0].id,
+            id: this.#rawData.weather[0].icon,
             temperature: util.toNDecimalPlaces(util.toFarienhiet(this.#rawData.main.temp), 1),
             minTemperature: util.toNDecimalPlaces(util.toFarienhiet(this.#rawData.main.temp_min), 100),
             maxTemperature: util.toNDecimalPlaces(util.toFarienhiet(this.#rawData.main.temp_max), 100),
@@ -177,5 +202,6 @@ export class WeatherManager {
         }
 
         this.#weatherData = weatherData;
+        this.#currentWeatherLocation = weatherData.city;
     }
 }
