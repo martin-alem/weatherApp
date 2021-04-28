@@ -68,7 +68,6 @@ export class WeatherManager {
                     const lon = currentLocation[1];
                     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=aac304093f797550435d2ed3dad3f25b&units=metric`;
                     this.#makeRequest(url, resolve, reject);
-                    this.setDefaultLocation(`${currentLocation[0]},${currentLocation[1]}`);
                 })
                 .catch(error => {
                     reject(error)
@@ -153,6 +152,50 @@ export class WeatherManager {
     }
 
     /**
+     * 
+     * @returns 
+     */
+    retrieveSavedLocation() {
+        const locations = [];
+        let location = {};
+
+        if (localStorage.getItem("locations")) {
+            const savedLocations = localStorage.getItem("locations").split(",");
+
+            for (let i = 0; i < savedLocations.length; i += 2) {
+                location["name"] = savedLocations[i];
+                location["date"] = savedLocations[i + 1];
+                locations.push(location);
+                location = {};
+
+            }
+        }
+        return locations;
+    }
+
+    /**
+     * 
+     * @param {*} cityName 
+     */
+    deleteSavedLocation(cityName) {
+
+        const locations = [];
+
+        if (localStorage.getItem("locations")) {
+            const savedLocations = localStorage.getItem("locations").split(",");
+
+            for (let i = 0; i < savedLocations.length; i += 2) {
+
+                if (cityName !== savedLocations[i]) {
+                    locations.push(`${savedLocations[i]}, ${savedLocations[i + 1]}`);
+                }
+            }
+        }
+
+        localStorage.setItem("locations", locations);
+    }
+
+    /**
      * Makes an http request with the provides url.
      * The request is parsed into json.
      * Relevant data is extracted from json.
@@ -185,7 +228,7 @@ export class WeatherManager {
      */
     #extractWeatherData() {
         const weatherData = {
-            id: this.#rawData.weather[0].icon,
+            icon: this.#rawData.weather[0].icon,
             temperature: util.toNDecimalPlaces(util.toFarienhiet(this.#rawData.main.temp), 1),
             minTemperature: util.toNDecimalPlaces(util.toFarienhiet(this.#rawData.main.temp_min), 100),
             maxTemperature: util.toNDecimalPlaces(util.toFarienhiet(this.#rawData.main.temp_max), 100),

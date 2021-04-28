@@ -17,7 +17,7 @@ const eventHandles = {
                 view.render(data);
             })
             .catch(error => {
-                view.renderError(error.message)
+                view.renderNotification(error.message);
             })
             .finally(() => view.renderOrClearPreview());
     },
@@ -34,7 +34,7 @@ const eventHandles = {
                     view.render(data);
                 })
                 .catch(error => {
-                    view.renderError(error.message)
+                    view.renderNotification(error.message)
                 })
                 .finally(() => view.renderOrClearPreview());
         }
@@ -50,7 +50,7 @@ const eventHandles = {
                 view.render(data);
             })
             .catch(error => {
-                view.renderError(error.message)
+                view.renderNotification(error.message)
             })
             .finally(() => view.renderOrClearPreview());
     },
@@ -63,6 +63,52 @@ const eventHandles = {
         else {
             view.renderNotification(`Location ${location} Already Exist!!!`);
         }
+    },
+
+    handleButtonSave: () =>{
+
+    },
+
+    handleCard: (cityName) => {
+
+        if (cityName) {
+            view.renderOrClearPreview();
+            weatherManager.fetchDataOnFormSubmit(cityName)
+                .then(data => {
+                    view.render(data);
+                })
+                .catch(error => {
+                    view.renderNotification(error.message)
+                })
+                .finally(() => {
+                    eventHandles.closeModal();
+                    view.renderOrClearPreview();
+                });
+        }
+    },
+
+    handleDelete: (cityName) => {
+        weatherManager.deleteSavedLocation(cityName);
+    },
+
+
+    /**
+     * 
+     */
+    openModal: () => {
+        const locations = weatherManager.retrieveSavedLocation();
+        view.renderCard(locations, eventHandles.handleCard, eventHandles.handleDelete);
+        View.overlay.style.visibility = "visible";
+        View.modal.style.visibility = "visible";
+    },
+
+    /**
+     * 
+     */
+    closeModal: () => {
+        view.clearNodes();
+        View.overlay.style.visibility = "hidden";
+        View.modal.style.visibility = "hidden";
     }
 }
 

@@ -79,15 +79,19 @@
     margin-bottom: 4rem;
   }
 
-  .card {
+  .card-container {
     overflow-y: scroll;
     height: 50vh;
-    &-location {
+    .card {
       border: 1px solid $main-background-color;
       border-radius: 5px;
       padding: 2rem;
-      cursor: pointer;
       margin: 1.5rem;
+
+      .name,
+      .fa-trash {
+        cursor: pointer;
+      }
     }
 
     .fa-trash {

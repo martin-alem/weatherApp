@@ -7,6 +7,7 @@ export class View {
 
     #tempValue = document.querySelector(".temp-value");
     #image = document.querySelector(".weather-image");
+    #weatherImage = document.querySelector(".image");
     #extraValue = document.querySelectorAll(".extra-value");
 
     #value = document.querySelector(".value");
@@ -22,13 +23,15 @@ export class View {
     #lat = document.querySelector(".lat");
     #maxTemp = document.querySelector(".max_temp");
 
-    #overlay = document.querySelector(".overlay");
-    #modal = document.querySelector(".modal");
+    static overlay = document.querySelector(".overlay");
+    static modal = document.querySelector(".modal");
 
     #submitForm = document.querySelector(".search_input");
     #submitButton = document.querySelector(".btn-submit");
     #locationButton = document.querySelector(".btn-location");
     #likeButton = document.querySelector(".btn-like");
+    #cardContainer = document.querySelector(".card-container");
+    #buttonSave = document.querySelector(".btn-save");
 
     #notification = document.querySelector(".notification");
 
@@ -49,6 +52,7 @@ export class View {
      */
     render(data) {
 
+        this.#weatherImage.src = `http://openweathermap.org/img/wn/${data.icon}@2x.png`;
         this.#value.textContent = data.temperature;
         this.#location.textContent = `${data.city}, ${data.country}`;
         this.#description.textContent = data.description;
@@ -65,16 +69,72 @@ export class View {
     }
 
     /**
+     * 
+     * @param {*} data 
+     * @param {*} handler1 
+     * @param {*} handler2 
+     */
+    renderCard(data, handler1, handler2) {
+
+        data.forEach(element => {
+            const card = document.createElement("div");
+            card.classList.add("card");
+
+
+            const heading = document.createElement("h3");
+            heading.classList.add("name");
+            heading.textContent = element.name;
+
+
+            const paragraph = document.createElement("p");
+            paragraph.classList.add("data");
+            paragraph.textContent = element.date;
+
+            const span = document.createElement("span");
+            const i = document.createElement("i");
+            i.classList.add("fa", "fa-trash");
+            i.style.fontSize = "24px";
+
+            span.appendChild(i);
+
+
+            card.append(heading, paragraph, span);
+
+            this.#cardContainer.insertAdjacentElement("beforeend", card);
+            heading.addEventListener("click", (e) => {
+                handler1(e.target.textContent);
+            });
+            span.addEventListener("click", (e) => {
+                const t = e.target.parentElement.parentElement;
+                this.#cardContainer.removeChild(t);
+                handler2(e.target.parentElement.previousElementSibling.previousElementSibling.textContent);
+            });
+        });
+    }
+
+
+    /**
+     * 
+     */
+    clearNodes() {
+
+        document.querySelectorAll(".card").forEach(element => {
+            element.remove();
+        })
+    }
+
+    /**
      * Sets up eventListeners and provides required callback
      * @param {object} eventHandles 
     */
     eventListeners(eventHandles) {
 
-        this.#bookMarkButton.addEventListener("click", this.#openModal);
-        this.#closeButton.addEventListener("click", this.#closeModal);
+        this.#bookMarkButton.addEventListener("click", eventHandles.openModal);
+        this.#closeButton.addEventListener("click", eventHandles.closeModal);
         this.#submitButton.addEventListener("click", eventHandles.handleFormSubmit);
         this.#locationButton.addEventListener("click", eventHandles.handleLocationButton);
         this.#likeButton.addEventListener("click", eventHandles.handleLikeButton);
+        this.#buttonSave.addEventListener("click", eventHandles.handleButtonSave);
         window.addEventListener("load", eventHandles.handlePageLoad);
     }
 
@@ -86,7 +146,7 @@ export class View {
         try {
             return util.validateCityName(this.#submitForm.value);
         } catch (error) {
-            this.renderError(error.message);
+            this.renderN(error.message);
             return null;
         }
     }
@@ -103,21 +163,5 @@ export class View {
         setTimeout(() => {
             this.#notification.classList.toggle("clear");
         }, 3000);
-    }
-
-    /**
-     * 
-     */
-    #openModal() {
-        this.#overlay.style.visibility = "visible";
-        this.#modal.style.visibility = "visible";
-    }
-
-    /**
-     * 
-     */
-    #closeModal() {
-        this.#overlay.style.visibility = "hidden";
-        this.#modal.style.visibility = "hidden";
     }
 }
