@@ -26,8 +26,8 @@ export class WeatherManager {
             return new Promise((resolve, reject) => {
                 this.#getCurrentLocation()
                     .then(currentLocation => {
-                        const lat = location[0];
-                        const lon = location[1];
+                        const lat = currentLocation[0];
+                        const lon = currentLocation[1];
                         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=aac304093f797550435d2ed3dad3f25b&units=metric`;
                         this.#makeRequest(url, resolve, reject);
                         this.setDefaultLocation(`${currentLocation[0]},${currentLocation[1]}`);
@@ -123,7 +123,8 @@ export class WeatherManager {
      */
     #extractWeatherData() {
         const weatherData = {
-            temparature: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.temp), 10),
+            id: this.#rawData.weather[0].id,
+            temperature: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.temp), 1),
             minTemperature: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.temp_min), 100),
             maxTemperature: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.temp_max), 100),
             feelsLike: this.#toNDecimalPlaces(this.#toFarienhiet(this.#rawData.main.feels_like), 100),

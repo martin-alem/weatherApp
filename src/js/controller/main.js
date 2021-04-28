@@ -1,5 +1,5 @@
-import {eventListeners, overlay, modal, renderPreview, clearPreview} from "./../view/events";
-import {WeatherManager} from "./../model/weatherManager"
+import { eventListeners, overlay, modal, renderOrClearPreview, render } from "./../view/events";
+import { WeatherManager } from "./../model/weatherManager"
 
 
 const weatherManager = new WeatherManager();
@@ -17,13 +17,13 @@ const eventHandles = {
     },
 
     handlePageLoad: () => {
-        renderPreview();
-       weatherManager.fetchDataOnPageLoad()
-       .then(data => {
-           clearPreview();
-           console.log(data);
-       })
-       .catch(error => console.log(error))
+        renderOrClearPreview();
+        weatherManager.fetchDataOnPageLoad()
+            .then(data => {
+                renderOrClearPreview();
+                render(data);
+            })
+            .catch(error => console.log(error))
     }
 }
 
