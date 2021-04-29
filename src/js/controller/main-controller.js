@@ -1,5 +1,5 @@
 import { View } from "../view/main-view";
-import { WeatherManager } from "../model/weatherManager"
+import { WeatherManager } from "../model/weatherManager";
 
 
 const weatherManager = new WeatherManager();
@@ -8,7 +8,10 @@ const view = new View();
 const eventHandles = {
 
     /**
-     * 
+     * Handles page load event.
+     * Renders preview.
+     * makes request
+     * renders data to view
      */
     handlePageLoad: () => {
         view.renderOrClearPreview();
@@ -17,13 +20,16 @@ const eventHandles = {
                 view.render(data);
             })
             .catch(error => {
-                view.renderNotification(error.message);
+                view.renderNotification(error);
             })
             .finally(() => view.renderOrClearPreview());
     },
 
     /**
-     * 
+     * Handles form submission.
+     * Gets input
+     * makes request if input valid
+     * renders data to view
      */
     handleFormSubmit: () => {
         const cityName = view.getFormInput();
@@ -41,7 +47,9 @@ const eventHandles = {
     },
 
     /**
-     * 
+     * Handles location button pressed event
+     * makes request
+     * renders data to view
      */
     handleLocationButton: () => {
         view.renderOrClearPreview();
@@ -55,21 +63,43 @@ const eventHandles = {
             .finally(() => view.renderOrClearPreview());
     },
 
+    /**
+     * Handles Like button pressed event
+     * persist location in local storage
+     */
     handleLikeButton: () => {
         const location = weatherManager.persistLocation();
         if (location) {
             view.renderNotification(`Location ${location} Saved Successfully!!!`);
         }
         else {
-            view.renderNotification(`Location ${location} Already Exist!!!`);
+            view.renderNotification(`Location Already Exist!!!`);
         }
     },
 
+    /**
+     * Handles save button pressed event
+     * set current location as default
+     */
     handleButtonSave: () => {
-        weatherManager.setDefaultLocation("Yes");
-        view.renderNotification(`Location Set As Default!!!`);
+        try {
+            weatherManager.setDefaultLocationOnButtonClick();
+            view.renderNotification(`Location Set As Default!!!`);
+        } catch (error) {
+            view.renderNotification(error.message);
+        }
     },
 
+
+
+    /**
+     * Handles the click events on card element
+     * Gets name from card
+     * makes a request
+     * renders data to view
+     * closes modal
+     * @param {String} cityName 
+     */
     handleCard: (cityName) => {
 
         if (cityName) {
@@ -88,13 +118,20 @@ const eventHandles = {
         }
     },
 
+    /**
+     * Handles delete event listener attached to card.
+     * deletes a location from local storage.
+     * @param {String} cityName 
+     */
     handleDelete: (cityName) => {
         weatherManager.deleteSavedLocation(cityName);
     },
 
 
     /**
-     * 
+     * Opens the modal
+     * retrieves and returns saved location from local storage
+     * renders the data with data and corresponding event handlers
      */
     openModal: () => {
         const locations = weatherManager.retrieveSavedLocation();
@@ -104,7 +141,8 @@ const eventHandles = {
     },
 
     /**
-     * 
+     * Close the modal
+     * Clears all elements with card class from card-container
      */
     closeModal: () => {
         view.clearNodes();

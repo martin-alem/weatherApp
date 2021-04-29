@@ -17,7 +17,6 @@ export class WeatherManager {
         const location = this.#getDefaultLocation();
 
         if (location) {
-
             return new Promise((resolve, reject) => {
                 const lat = location[0];
                 const lon = location[1];
@@ -32,7 +31,7 @@ export class WeatherManager {
                         const lon = currentLocation[1];
                         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=aac304093f797550435d2ed3dad3f25b&units=metric`;
                         this.#makeRequest(url, resolve, reject);
-                        this.setDefaultLocation("No");
+                        this.setDefaultLocationOnPageLoad(currentLocation);
                     })
                     .catch(error => {
                         reject(error)
@@ -43,9 +42,9 @@ export class WeatherManager {
 
 
     /**
-     * 
-     * @param {*} cityName 
-     * @returns 
+     * Makes a request with provides cityname and returns a promise
+     * @param {String} cityName 
+     * @returns A promise with resolved value as weather data
      */
     fetchDataOnFormSubmit(cityName) {
 
@@ -56,8 +55,8 @@ export class WeatherManager {
     }
 
     /**
-     * 
-     * @returns 
+     * Makes a request with coordinates and returns a promise
+     * @returns A promise with resolved value as weather data
      */
     fetchDataOnLocationButton() {
 
@@ -70,7 +69,7 @@ export class WeatherManager {
                     this.#makeRequest(url, resolve, reject);
                 })
                 .catch(error => {
-                    reject(error)
+                    reject(error);
                 });
         });
     }
@@ -81,7 +80,7 @@ export class WeatherManager {
      */
     #getDefaultLocation() {
 
-        if (window.localStorage.getItem("defaultLocation")) {
+        if (localStorage.getItem("defaultLocation")) {
             const defaultLocation = window.localStorage.getItem("defaultLocation").split(",");
             return defaultLocation;
 
@@ -105,34 +104,47 @@ export class WeatherManager {
                     const location = [];
                     location.push(position.coords.latitude, position.coords.longitude);
                     resolve(location);
-                }, error => {
-                    reject(error);
-                })
+                }, () => {
+                    reject(new Error("Location is needed to continue"));
+                });
             }
         });
     }
 
     /**
-     * Accepts a location as string.
-     * Checks if it already exist.
-     * If yes, location is not persisted.
-     * If no, location is persisted in localStorage.
-     * @param {String} location
+     * Accepts a location as Array.
+     * If default location does not exist.
+     * Current location is persisted
+     * @param {Array} location
      */
-    setDefaultLocation(cmd) {
+    setDefaultLocationOnPageLoad(coord) {
 
-        const location = `${this.#weatherData.coords.lat},${this.#weatherData.coords.lon}`;
-        if (localStorage.getItem("defaultLocation")) {
-            if (cmd === "Yes") {
-                localStorage.removeItem("defaultLocation");
-            }
+        if (!localStorage.getItem("defaultLocation")) {
+            const location = `${coord[0]},${coord[1]}`;
+            localStorage.setItem("defaultLocation", location);
         }
-        localStorage.setItem("defaultLocation", location);
+    }
+
+
+    /**
+     * Makes sure default location already exist and weatherData is not undefine.
+     * If No, Error is thrown.
+     * If Yes, new location is persisted in localStorage.
+     */
+    setDefaultLocationOnButtonClick() {
+
+        if (localStorage.getItem("defaultLocation") && this.#weatherData) {
+            const location = `${this.#weatherData.coords.lat},${this.#weatherData.coords.lon}`;
+            localStorage.removeItem("defaultLocation");
+            localStorage.setItem("defaultLocation", location);
+        } else {
+            throw new Error("Please reload your browser");
+        }
     }
 
     /**
-     * 
-     * @returns 
+     * Persist the current weather location to local storage if it does not already exist
+     * @returns Current Weather Location or null
      */
     persistLocation() {
 
@@ -156,8 +168,8 @@ export class WeatherManager {
     }
 
     /**
-     * 
-     * @returns 
+     * Retrieves saved location from local storage
+     * @returns An array of location objects
      */
     retrieveSavedLocation() {
         const locations = [];
@@ -178,8 +190,8 @@ export class WeatherManager {
     }
 
     /**
-     * 
-     * @param {*} cityName 
+     * Find a location by name and deletes if request was sent by delete action
+     * @param {Sttring} cityName 
      */
     deleteSavedLocation(cityName) {
 
@@ -219,12 +231,12 @@ export class WeatherManager {
                             this.#extractWeatherData();
                             resolve(this.#weatherData);
                         })
-                        .catch(error => reject(error));
+                        .catch(() => reject(new Error("Response could not be parsed to json")));
                 } else {
                     reject(new Error("Invalid Request"))
                 }
             })
-            .catch(error => reject(error));
+            .catch(() => reject(new Error("Request could not be made")));
     }
 
     /**

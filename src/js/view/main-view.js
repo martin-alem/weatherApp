@@ -47,8 +47,8 @@ export class View {
     }
 
     /**
-     * 
-     * @param {*} data 
+     * Renders html elements with data from data
+     * @param {object} data 
      */
     render(data) {
 
@@ -69,10 +69,10 @@ export class View {
     }
 
     /**
-     * 
-     * @param {*} data 
-     * @param {*} handler1 
-     * @param {*} handler2 
+     * Builds and renders cards elements with data from data
+     * @param {object} data 
+     * @param {Function} handler1 
+     * @param {Function} handler2 
      */
     renderCard(data, handler1, handler2) {
 
@@ -97,10 +97,10 @@ export class View {
 
             span.appendChild(i);
 
-
             card.append(heading, paragraph, span);
 
             this.#cardContainer.insertAdjacentElement("beforeend", card);
+            
             heading.addEventListener("click", (e) => {
                 handler1(e.target.textContent);
             });
@@ -114,13 +114,13 @@ export class View {
 
 
     /**
-     * 
+     * Delets all nodes from card container with class = card
      */
     clearNodes() {
 
         document.querySelectorAll(".card").forEach(element => {
             element.remove();
-        })
+        });
     }
 
     /**
@@ -139,8 +139,9 @@ export class View {
     }
 
     /**
-     * 
-     * @returns 
+     * Gets, validata and sanitize form input.
+     * Return clean input or null
+     * @returns String or null
      */
     getFormInput() {
         try {
@@ -152,12 +153,12 @@ export class View {
     }
 
     /**
-     * 
-     * @param {*} errorMessage 
+     * Renders notification message with a specified message
+     * @param {String} message 
      */
-    renderNotification(errorMessage) {
+    renderNotification(message) {
 
-        this.#notification.textContent = errorMessage;
+        this.#notification.textContent = message;
         this.#notification.classList.toggle("clear");
 
         setTimeout(() => {
