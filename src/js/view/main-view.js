@@ -52,7 +52,7 @@ export class View {
      */
     render(data) {
 
-        this.#weatherImage.src = `http://openweathermap.org/img/wn/${data.icon}@2x.png`;
+        this.#weatherImage.src = `https://openweathermap.org/img/wn/${data.icon}@2x.png`;
         this.#value.textContent = data.temperature;
         this.#location.textContent = `${data.city}, ${data.country}`;
         this.#description.textContent = data.description;
