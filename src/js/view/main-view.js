@@ -100,7 +100,7 @@ export class View {
             card.append(heading, paragraph, span);
 
             this.#cardContainer.insertAdjacentElement("beforeend", card);
-            
+
             heading.addEventListener("click", (e) => {
                 handler1(e.target.textContent);
             });
@@ -147,7 +147,7 @@ export class View {
         try {
             return util.validateCityName(this.#submitForm.value);
         } catch (error) {
-            this.renderN(error.message);
+            this.renderNotification(error.message);
             return null;
         }
     }
