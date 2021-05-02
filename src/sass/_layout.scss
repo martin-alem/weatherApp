@@ -1,43 +1,41 @@
 .main-section {
-  width: 114rem;
-  background-color: $main-background-color;
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%, -20%);
-  padding: 6rem;
-
-  .section-1 {
-    margin-bottom: 4rem;
-    display: grid;
-    grid-template-columns: repeat(2, auto) 2fr repeat(2, auto);
-    align-items: center;
-    gap: 3rem;
-  }
-
-  .section-2 {
-    margin-bottom: 8rem;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20rem;
-    align-items: center;
-    text-align: center;
-
-    .image {
-      position: relative;
+    width: 1114px;
+    background-color: $main-background-color;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    padding: 6rem;
+    .section-1 {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 2rem;
+        .btn-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: space-around;
+        }
     }
-
-    .description {
-      position: relative;
-      top: -5rem;
+    .section-2 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8rem;
+        .weather-image{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .temp-value{
+            display: flex;
+            flex-direction: column;
+        }
     }
-  }
-
-  .section-3 {
-    display: grid;
-    grid-template-columns: repeat(3, auto);
-    grid-template-rows: repeat(3, auto);
-    justify-content: space-around;
-    row-gap: 1rem;
-  }
+    .section-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        column-gap: 3rem;
+        justify-content: center;
+    }
 }

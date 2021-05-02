@@ -1,169 +1,72 @@
-@media screen and (max-width: 1135px) {
+@media screen and (max-width: 1098px) {
+    body{
+        background-color: $main-background-color;
+    }
     .main-section{
-        width: 100%;
-    }
-}
-
-@media screen and (max-width: 1095px) {
-
-    .main-section{
-        .section-1{
-            grid-template-columns: repeat(2, auto) 2fr repeat(2, auto);
-            justify-content: space-around;
-        }
-        .search{
-            &_input{
-                width: 70%;
-            }
-        }
-    }
-
-    h1{
-        font-size: 20rem;
-        height: 26rem;
-        font-weight: 700;
-    
-        .units{
-            position: absolute;
-            font-size: 5rem;
-            top: 3.5rem;
-            right: -4rem;
-        }
-    }
-    h3{
-        font-size: 1.5rem
-    }
-
-    h2{
-        font-size: 3rem;
-    }
-}
-
-@media screen and (max-width: 833px){
-    .main-section{
-
-        .section-3{
-            grid-template-columns: repeat(2, auto);
-            grid-template-rows: repeat(2, auto);
-        }
-    }
-
-    h1{
-        font-size: 15rem;
-        height: 13rem;
-        font-weight: 700;
-    
-        .units{
-            position: absolute;
-            font-size: 5rem;
-            top: 3.5rem;
-            right: -4rem;
-        }
-    }
-    h3{
-        font-size: 1.5rem
-    }
-
-    h2{
-        font-size: 3rem;
-    }
-    
-}
-
-// @media screen and (max-width: 697px) {
-//     h1{
-//         font-size: 20rem;
-//         height: 26rem;
-//         font-weight: 700;
-    
-//         .units{
-//             position: absolute;
-//             font-size: 5rem;
-//             top: 3.5rem;
-//             right: -4rem;
-//         }
-//     }
-//     h3{
-//         font-size: 1.5rem
-//     }
-
-//     h2{
-//         font-size: 3rem;
-//     }
-    
-// }
-
-@media screen and (max-width: 655px) {
-    
-    .main-section{
-        .section-1{
-            display: grid;
-            grid-template-columns: repeat(4, auto);
-            grid-template-rows: repeat(2, auto);
-            row-gap: 1rem;
-
-            .btn{
-                &-save{
-                    grid-row: 2 / span 1;
-                    grid-column: 1 / span 1;
-                }
-                &-location{
-                    grid-column: 2 / span 1;
-                    grid-row: 2 / span 1;
-                }
-                &-bookmark{
-                    grid-row: 2 / span 1;
-                    grid-column: 3 / span 1;
-                }
-                &-like{
-                    grid-row: 2 / span 1;
-                    grid-column: 4 / span 1;
-                }
-            }
-
-            .search{
-                grid-column: 1 / -1;
-            }
-        }
-        .search{
-            &_input{
-                width: 80%;
-            }
-        }
-    }
-}
-
-@media screen and (max-width: 585px) {
-    .main-section{
+        width: 100vw;
         height: 100vh;
-        .section-2{
-            margin-bottom: 8rem;
-            display: block;
-        }
+    }
+    .modal{
+        width: 50vw;
+    }
+}
 
-        .section-3{
-            display: grid;
-            grid-template-columns: repeat(1, auto);
-        }
+@media screen and (max-width: 1000px) {
 
-        .search{
-            &_input{
-                width: 75%;
-            }
+    p{
+        &.extra-data{
+            font-size: 2rem;
         }
     }
 
-    
-// h1{
-//     font-size: 20rem;
-//     height: 26rem;
-//     font-weight: 700;
-//     position: relative;
-//     .units{
-//         position: absolute;
-//         font-size: 5rem;
-//         top: 3.5rem;
-//         right: 4rem;
-//     }
-// }
+    h1{
+        font-size: 25rem;
+    }
+
+    h2{
+        font-size: 3rem;
+    }
+}
+
+@media screen and (max-width: 867px) {
+    .main-section{
+        .section-3{
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+        }
+    }
+    .modal{
+        width: 70vw;
+    }
+}
+
+@media screen and (max-width: 855px) {
+    .main-section{
+        .section-2{
+            flex-direction: column;
+        }
+    }
+
+    .modal{
+        width: 90vw;
+    }
+}
+
+@media screen and (min-width: 200px) and (max-width: 614px) {
+    .main-section{
+        .section-1{
+            flex-direction: column;
+            .btn-container {
+                margin: 2rem;
+            }
+        }
+        .section-3{
+            grid-template-columns: repeat(1, 1fr);
+            grid-template-rows: repeat(1, 1fr);
+        }
+    }
+
+    .modal{
+        width: 100vw;
+    }
 }
