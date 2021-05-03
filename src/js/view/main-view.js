@@ -23,8 +23,8 @@ export class View {
     #lat = document.querySelector(".lat");
     #maxTemp = document.querySelector(".max_temp");
 
-    static overlay = document.querySelector(".overlay");
-    static modal = document.querySelector(".modal");
+    overlay = document.querySelector(".overlay");
+    modal = document.querySelector(".modal");
 
     #submitForm = document.querySelector(".search_input");
     #submitButton = document.querySelector(".btn-submit");
@@ -32,6 +32,7 @@ export class View {
     #likeButton = document.querySelector(".btn-like");
     #cardContainer = document.querySelector(".card-container");
     #buttonSave = document.querySelector(".btn-save");
+    #form = document.querySelector("#search-form");
 
     #notification = document.querySelector(".notification");
 
@@ -127,15 +128,15 @@ export class View {
      * Sets up eventListeners and provides required callback
      * @param {object} eventHandles 
     */
-    eventListeners(eventHandles) {
-
-        this.#bookMarkButton.addEventListener("click", eventHandles.openModal);
-        this.#closeButton.addEventListener("click", eventHandles.closeModal);
-        this.#submitButton.addEventListener("click", eventHandles.handleFormSubmit);
-        this.#locationButton.addEventListener("click", eventHandles.handleLocationButton);
-        this.#likeButton.addEventListener("click", eventHandles.handleLikeButton);
-        this.#buttonSave.addEventListener("click", eventHandles.handleButtonSave);
-        window.addEventListener("load", eventHandles.handlePageLoad);
+    eventListeners(controlHandlers) {
+        this.#bookMarkButton.addEventListener("click", controlHandlers.openModal);
+        this.#closeButton.addEventListener("click", controlHandlers.closeModal);
+        this.#submitButton.addEventListener("click", controlHandlers.handleFormSubmit);
+        this.#form.addEventListener("submit", (e) => e.preventDefault());
+        this.#locationButton.addEventListener("click", controlHandlers.handleLocationButton);
+        this.#likeButton.addEventListener("click", controlHandlers.handleLikeButton);
+        this.#buttonSave.addEventListener("click", controlHandlers.handleButtonSave);
+        window.addEventListener("load", controlHandlers.handlePageLoad);
     }
 
     /**

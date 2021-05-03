@@ -1,10 +1,11 @@
 import { View } from "../view/main-view";
 import { WeatherManager } from "../model/weatherManager";
 
+
 (function () {
 
-    const weatherManager = new WeatherManager();
     const view = new View();
+    const weatherManager = new WeatherManager();
 
     const handlers = {
 
@@ -26,14 +27,14 @@ import { WeatherManager } from "../model/weatherManager";
                 .finally(() => view.renderOrClearPreview());
         },
 
+
         /**
          * Handles form submission.
          * Gets input
          * makes request if input valid
          * renders data to view
          */
-        handleFormSubmit: (e) => {
-            e.preventDefault();
+        handleFormSubmit: () => {
             const cityName = view.getFormInput();
             if (cityName) {
                 view.renderOrClearPreview();
@@ -48,12 +49,14 @@ import { WeatherManager } from "../model/weatherManager";
             }
         },
 
+
         /**
          * Handles location button pressed event
          * makes request
          * renders data to view
          */
-        handleLocationButton: () => {
+        handleLocationButton() {
+
             view.renderOrClearPreview();
             weatherManager.fetchDataOnLocationButton()
                 .then(data => {
@@ -65,25 +68,26 @@ import { WeatherManager } from "../model/weatherManager";
                 .finally(() => view.renderOrClearPreview());
         },
 
+
         /**
          * Handles Like button pressed event
          * persist location in local storage
          */
-        handleLikeButton: () => {
+        handleLikeButton() {
             const location = weatherManager.persistLocation();
             if (location) {
                 view.renderNotification(`Location ${location} Saved Successfully!!!`);
-            }
-            else {
+            } else {
                 view.renderNotification(`Location Already Exist!!!`);
             }
         },
+
 
         /**
          * Handles save button pressed event
          * set current location as default
          */
-        handleButtonSave: () => {
+        handleButtonSave() {
             try {
                 weatherManager.setDefaultLocationOnButtonClick();
                 view.renderNotification(`Location Set As Default!!!`);
@@ -91,7 +95,6 @@ import { WeatherManager } from "../model/weatherManager";
                 view.renderNotification(error.message);
             }
         },
-
 
 
         /**
@@ -102,7 +105,7 @@ import { WeatherManager } from "../model/weatherManager";
          * closes modal
          * @param {String} cityName 
          */
-        handleCard: (cityName) => {
+        handleCard(cityName) {
 
             if (cityName) {
                 view.renderOrClearPreview();
@@ -114,7 +117,7 @@ import { WeatherManager } from "../model/weatherManager";
                         view.renderNotification(error.message)
                     })
                     .finally(() => {
-                        handlers.closeModal();
+                        this.closeModal();
                         view.renderOrClearPreview();
                     });
             }
@@ -125,32 +128,32 @@ import { WeatherManager } from "../model/weatherManager";
          * deletes a location from local storage.
          * @param {String} cityName 
          */
-        handleDelete: (cityName) => {
+        handleDelete(cityName) {
             weatherManager.deleteSavedLocation(cityName);
         },
-
 
         /**
          * Opens the modal
          * retrieves and returns saved location from local storage
          * renders the data with data and corresponding event handlers
          */
-        openModal: () => {
+        openModal() {
             const locations = weatherManager.retrieveSavedLocation();
             view.renderCard(locations, handlers.handleCard, handlers.handleDelete);
-            View.overlay.style.visibility = "visible";
-            View.modal.style.visibility = "visible";
+            view.overlay.style.visibility = "visible";
+            view.modal.style.visibility = "visible";
         },
 
         /**
-         * Close the modal
-         * Clears all elements with card class from card-container
-         */
-        closeModal: () => {
+        * Close the modal
+        * Clears all elements with card class from card-container
+        */
+        closeModal() {
             view.clearNodes();
-            View.overlay.style.visibility = "hidden";
-            View.modal.style.visibility = "hidden";
+            view.overlay.style.visibility = "hidden";
+            view.modal.style.visibility = "hidden";
         }
+
     }
 
     view.eventListeners(handlers);

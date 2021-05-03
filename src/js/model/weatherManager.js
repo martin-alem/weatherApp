@@ -148,7 +148,7 @@ export class WeatherManager {
      */
     persistLocation() {
 
-        if (localStorage.getItem("locations")) {
+        if (localStorage.getItem("locations") && this.#currentWeatherLocation) {
             const savedLocations = localStorage.getItem("locations").split(",");
 
             for (let i = 0; i < savedLocations.length; i += 2) {
@@ -159,7 +159,7 @@ export class WeatherManager {
             savedLocations.push(`${this.#currentWeatherLocation},${Date()}`);
             localStorage.setItem("locations", savedLocations);
         }
-        else {
+        else if(this.#currentWeatherLocation) {
             const location = `${this.#currentWeatherLocation},${Date()}`;
             localStorage.setItem("locations", location);
         }
