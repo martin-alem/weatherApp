@@ -117,7 +117,7 @@ import { WeatherManager } from "../model/weatherManager";
                         view.renderNotification(error.message)
                     })
                     .finally(() => {
-                        this.closeModal();
+                        handlers.closeModal();
                         view.renderOrClearPreview();
                     });
             }
